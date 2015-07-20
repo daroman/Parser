@@ -13,17 +13,17 @@ function parseIt() {
     var output = "";
     var table = "<table>";
     
-    // inefficient
-    var nameSplit = lines[i - 1].split(" ");
-    var firstName = nameSplit[0];
-    var lastName = nameSplit[1];
-    
-    
     for (var i = 0; i < lines.length; i++) {
         //code here using lines[i] which will give you each line
         // look for lines ending with "Saved"; previous line will be name, following line is title. Add those two to the output separated by a tab.
         if (lines[i].search(/TeamLink$|Saved$|3rd$|2nd$/) > 0){
             var eml = email(lines[i - 1]);
+            
+            // inefficient
+            var nameSplit = lines[i - 1].split(" ");
+            var firstName = nameSplit[0];
+            var lastName = nameSplit[1];
+    
             //output = output + lines[i - 1] + "\t" + lines[i + 1].replace(/ at \w+$/, "") + "\t" + eml + "\n";
             table = table + "<tr><td><b>" + firstName + "</b></td><td>" + "<td><b>" + lastName + "</b></td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
         }

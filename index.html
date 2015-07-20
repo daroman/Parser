@@ -25,7 +25,7 @@ function parseIt() {
             var lastName = nameSplit[1];
     
             //output = output + lines[i - 1] + "\t" + lines[i + 1].replace(/ at \w+$/, "") + "\t" + eml + "\n";
-            table = table + "<tr><td><b>" + firstName + "</b></td><td>" + "<td><b>" + lastName + "</b></td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
         }
     }
     table = table + "</table>";

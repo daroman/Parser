@@ -37,6 +37,9 @@ function parseIt() {
 }
 
 function email(name) {
+    if (name == "") {
+        return;
+    }
 
     var pat = document.getElementById("pat").value;
     

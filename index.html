@@ -20,14 +20,19 @@ function parseIt() {
         if (lines[i].search(/TeamLink$|Saved$|3rd$|2nd$|Open link$|1st$/) > 0){
             numMatches++;
             var eml = email(lines[i - 1]);
-            
-            // inefficient
-            var nameSplit = lines[i - 1].split(" ");
-            var firstName = nameSplit[0];
-            var lastName = nameSplit[1];
     
             //output = output + lines[i - 1] + "\t" + lines[i + 1].replace(/ at \w+$/, "") + "\t" + eml + "\n";
-            table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            if (document.getElementById("nameColumn").selectedIndex == 0) {  // name goes in two columns
+                 // inefficient because we also do this inside the email() function
+                var nameSplit = lines[i - 1].split(" ");
+                var firstName = nameSplit[0];
+                var lastName = nameSplit[1];
+
+                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            } else {
+            table = table + "<tr><td><b>" + lines[i - 1] + "</b></td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            }
+            
         }
     }
     table = table + "</table>";
@@ -102,13 +107,14 @@ font-weight: 400;
 
     <body>
         
-<div style="font-size:20px;margin-top:5px"><img src="http://www.cloudera.com/content/dam/cloudera/logos/Cloudera_logo_rgb.png" style="width: 168px;margin-bottom:15px;margin-right:25px" valign="left" align="middle">LinkedIn Lead Parser by <a href="mailto:droman@cloudera.com">Daniel Roman</a> | 2015-July-20 | <a href="https://www.linkedin.com/sales/?trk=nav_logo"><img src="https://static.licdn.com/scds/common/u/images/logos/linkedin/logo_in_nav_retina_88x72.png" width="22">Sales Navigator</a></div>
+<div style="font-size:20px;margin-top:5px"><img src="http://www.cloudera.com/content/dam/cloudera/logos/Cloudera_logo_rgb.png" style="width: 168px;margin-bottom:15px;margin-right:25px" valign="left" align="middle">LinkedIn Lead Parser by <a href="mailto:droman@cloudera.com">Daniel Roman</a> | 2015-July-21 | <a href="https://www.linkedin.com/sales/?trk=nav_logo"><img src="https://static.licdn.com/scds/common/u/images/logos/linkedin/logo_in_nav_retina_88x72.png" width="22">Sales Navigator</a></div>
 
         <form name="li">
             <input type="text" id="pat" value="FILN@company.com" size="40" onChange="parseIt();">
             <input type="hidden" id="code">
             <a href="javascript:alert('Use any of the following tokens to infer email addresses for this organization. Don\'t forget to put the right domain name at the end. FI=First Initial, LI=Last Initial, FN=First Name, LN=Last Name');"><i>Substitution keys: FI, LI, FN, LN</i></a>
             <button type="submit" form="li" onClick="parseIt();">Parse leads</button>
+            <select id="nameColumn" onChange="parseIt();"><option selected>First and last name in separate columns</option><option>Full name in one column</option></select>
             <br>
             <textarea rows="5" cols="120" id="src" onChange='parseIt();'></textarea>
             <br>

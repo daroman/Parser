@@ -6,7 +6,8 @@
 var tokens = ["{FI}", "{LI}", "{FN}", "{LN}"];
 
 function parseIt() {
-
+    var numMatches = 0;
+    
     var textArea = document.getElementById("src");
     var lines = textArea.value.split("\n"); // arrayOfLines is array where every element is string of one line
 
@@ -17,6 +18,7 @@ function parseIt() {
         //code here using lines[i] which will give you each line
         // look for lines ending with "Saved"; previous line will be name, following line is title. Add those two to the output separated by a tab.
         if (lines[i].search(/TeamLink$|Saved$|3rd$|2nd$|Open link$|1st$/) > 0){
+            numMatches++;
             var eml = email(lines[i - 1]);
             
             // inefficient
@@ -30,7 +32,7 @@ function parseIt() {
     }
     table = table + "</table>";
     
-    document.getElementById("table").innerHTML = table;
+    document.getElementById("table").innerHTML = "Parsed " + numMatches + " leads.<br>" + table;
     //document.getElementById("dst").value = output;
 }
 

@@ -16,7 +16,7 @@ function parseIt() {
     for (var i = 0; i < lines.length; i++) {
         //code here using lines[i] which will give you each line
         // look for lines ending with "Saved"; previous line will be name, following line is title. Add those two to the output separated by a tab.
-        if (lines[i].search(/TeamLink$|Saved$|3rd$|2nd$|Open link$/) > 0){
+        if (lines[i].search(/TeamLink$|Saved$|3rd$|2nd$|Open link$|1st$/) > 0){
             var eml = email(lines[i - 1]);
             
             // inefficient

@@ -32,7 +32,7 @@ function parseIt() {
     }
     table = table + "</table>";
     
-    document.getElementById("table").innerHTML = "Parsed " + numMatches + " leads.<br>" + table;
+    document.getElementById("table").innerHTML = "Parsed " + numMatches + " leads.<br><br>" + table;
     //document.getElementById("dst").value = output;
 }
 
@@ -94,7 +94,7 @@ font-weight: 400;
 
     <body>
         
-<div style="font-size:20px;margin-top:5px"><img src="http://www.cloudera.com/content/dam/cloudera/logos/Cloudera_logo_rgb.png" style="width: 168px;margin-bottom:15px;margin-right:25px" valign="left" align="middle">LinkedIn Lead Parser by <a href="mailto:droman@cloudera.com">Daniel Roman</a> | 2015-July-20</div>
+<div style="font-size:20px;margin-top:5px"><img src="http://www.cloudera.com/content/dam/cloudera/logos/Cloudera_logo_rgb.png" style="width: 168px;margin-bottom:15px;margin-right:25px" valign="left" align="middle">LinkedIn Lead Parser by <a href="mailto:droman@cloudera.com">Daniel Roman</a> | 2015-July-20 | <a href="https://www.linkedin.com/sales/?trk=nav_logo"><img src="https://static.licdn.com/scds/common/u/images/logos/linkedin/logo_in_nav_retina_88x72.png" width="22">Sales Navigator</a></div>
 
         <form name="li">
             <input type="text" id="pat" value="{FI}{LN}@company.com" size="40" onChange="parseIt();">

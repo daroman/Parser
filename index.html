@@ -39,6 +39,10 @@ function parseIt() {
 function email(name) {
 
     var pat = document.getElementById("pat").value;
+    
+    // add brackets back into the pattern
+    for (var i = 0; i < tokens.length; i++)
+        pat = pat.replace(tokens[i], "{" + tokens[i] + "}");
 
     var nameSplit = name.split(" ");
 
@@ -49,8 +53,9 @@ function email(name) {
 
     var nameAry = [firstInit, lastInit, firstName, lastName];
 
+    // iterate over each replacement token and do the substitution
     for (var i = 0; i < tokens.length; i++)
-        pat = pat.replace(tokens[i], nameAry[i]);
+        pat = pat.replace("{" + tokens[i] + "}", nameAry[i]);
 
     return pat;
 }

@@ -3,7 +3,7 @@
     <head>
         <title>LinkedIn lead parser</title>
         <script language="javascript">
-var tokens = ["{FI}", "{LI}", "{FN}", "{LN}"];
+var tokens = ["FI", "LI", "FN", "LN"];
 
 function parseIt() {
     var numMatches = 0;
@@ -97,7 +97,7 @@ font-weight: 400;
 <div style="font-size:20px;margin-top:5px"><img src="http://www.cloudera.com/content/dam/cloudera/logos/Cloudera_logo_rgb.png" style="width: 168px;margin-bottom:15px;margin-right:25px" valign="left" align="middle">LinkedIn Lead Parser by <a href="mailto:droman@cloudera.com">Daniel Roman</a> | 2015-July-20 | <a href="https://www.linkedin.com/sales/?trk=nav_logo"><img src="https://static.licdn.com/scds/common/u/images/logos/linkedin/logo_in_nav_retina_88x72.png" width="22">Sales Navigator</a></div>
 
         <form name="li">
-            <input type="text" id="pat" value="{FI}{LN}@company.com" size="40" onChange="parseIt();">
+            <input type="text" id="pat" value="FILN@company.com" size="40" onChange="parseIt();">
             <input type="hidden" id="code">
             <a href="javascript:alert('Use any of the following tokens to infer email addresses for this organization. Don\'t forget to put the right domain name at the end. FI=First Initial, LI=Last Initial, FN=First Name, LN=Last Name');"><i>Substitution keys: FI, LI, FN, LN</i></a>
             <button type="submit" form="li" onClick="parseIt();">Parse leads</button>

@@ -28,9 +28,11 @@ function parseIt() {
                 var firstName = nameSplit[0];
                 var lastName = nameSplit[1];
 
-                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+                
+
+                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + getLocation(lines[i+2]) + "</td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
             } else {
-            table = table + "<tr><td><b>" + lines[i - 1] + "</b></td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            table = table + "<tr><td><b>" + lines[i - 1] + "</b></td><td>" + getLocation(lines[i+2]) + "</td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
             }
             
         }
@@ -39,6 +41,12 @@ function parseIt() {
     
     document.getElementById("table").innerHTML = "Parsed " + numMatches + " leads.<br><br>" + table;
     //document.getElementById("dst").value = output;
+}
+
+function getLocation (locString){
+    var string = locString.match(/Location(.*)Industry/);
+    if (string[1]) return string[1];
+    else return "";
 }
 
 function email(name) {

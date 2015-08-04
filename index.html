@@ -19,6 +19,10 @@ function isRegularLI(line){
     return (retVal == 0);
 }
 
+function sendHelp(){
+    document.location = "mailto:droman@cloudera.com?subject=LinkedIn%20Lead%20Parser&body=" + encodeURIComponent("Dear Daniel, please help!\n\nHere's some troubleshooting information:\n" + navigator.userAgent + "\n\n" + document.getElementById("src").value);
+}
+
 function isCrazyLI(prevLine, line){
     if (prevLine == ""){
         return (crazyMatch(line) > 0); 
@@ -199,7 +203,7 @@ font-weight: 400;
             <br>
             <div id='table'></div>
         </form>
-       <h1><a href="javascript:toggleHelp();">Learn how to use this tool</a></h1>
+       <h1><a href="javascript:toggleHelp();">Learn how to use this tool</a> | <a href='javascript:sendHelp();'>Still having trouble? Let me know</a></h1>
  <iframe id="help" style="visibility:hidden" src="https://app.box.com/embed/preview/ovxxtl6evfh5bbegw3qxpbquufx27wrl?view=&sort=&direction=ASC&theme=light" width="800" height="450" frameborder="0"allowfullscreen webkitallowfullscreen msallowfullscreen></iframe>
     </body>
 

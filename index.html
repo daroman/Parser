@@ -3,7 +3,44 @@
     <head>
         <title>LinkedIn lead parser</title>
         <script language="javascript">
+"use strict";
 var tokens = ["FI", "LI", "FN", "LN"];
+
+function isSalesNavigator(line, previousLine){
+    if (previousLine == ""){
+      return false;  
+    } 
+    var retVal = line.search(/TeamLink$|Saved$|3rd$|2nd$|Open link$|1st$/);
+    return (retVal > 0);
+}
+
+function isRegularLI(line){
+    var retVal = line.search(/^  .*/);
+    return (retVal == 0);
+}
+
+function isCrazyLI(prevLine, line){
+    if (prevLine == ""){
+        return (crazyMatch(line) > 0); 
+    }
+    return false;
+}
+
+function crazyMatch(line){
+    var position = line.search(/TeamLink|Premium Badge|3rd|2nd|Open link|1st|GROUP/);
+    return position;
+}
+
+function figureOutNames(string){
+    var ary = string.split(" ");
+    if (ary.length > 2){
+        // join together everything after second index
+        return new Array(ary[0], string.substring(string.search(" ")));
+    }
+    else {
+        return new Array(ary[0], ary[1]);
+    }
+}
 
 function parseIt() {
     var numMatches = 0;
@@ -13,46 +50,82 @@ function parseIt() {
 
     var output = "";
     var table = "<table>";
-    
+
     for (var i = 0; i < lines.length; i++) {
         //code here using lines[i] which will give you each line
         // look for lines ending with "Saved"; previous line will be name, following line is title. Add those two to the output separated by a tab.
-        if (lines[i].search(/TeamLink$|Saved$|3rd$|2nd$|Open link$|1st$/) > 0){
+        if (isSalesNavigator(lines[i], lines[i-1])){
             numMatches++;
-            var eml = email(lines[i - 1]);
-    
-            //output = output + lines[i - 1] + "\t" + lines[i + 1].replace(/ at \w+$/, "") + "\t" + eml + "\n";
-            if (document.getElementById("nameColumn").selectedIndex == 0) {  // name goes in two columns
-                 // inefficient because we also do this inside the email() function
-                var nameSplit = lines[i - 1].split(" ");
-                var firstName = nameSplit[0];
-                var lastName = nameSplit[1];
-
-                
-
-                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + getLocation(lines[i+2]) + "</td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
-            } else {
-            table = table + "<tr><td><b>" + lines[i - 1] + "</b></td><td>" + getLocation(lines[i+2]) + "</td><td>" + lines[i + 1].replace(/ at .+$/, "") + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
-            }
             
+            var fullName = lines[i-1];
+
+            var nameSplit = figureOutNames(fullName);
+
+            var firstName = nameSplit[0];
+            var lastName = nameSplit[1];
+
+            var eml = email(firstName, lastName);
+            var title = lines[i + 1].replace(/ at .+$/, "");
+            var location = getSNLocation(lines[i+2]);
+
+            if (document.getElementById("nameColumn").selectedIndex == 0) {  // name goes in two columns
+                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            } else {
+            table = table + "<tr><td><b>" + fullName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            } 
+        } else if (isRegularLI(lines[i])) {
+            numMatches++;
+            
+            var fullName = lines[i].replace(/^  /,"");
+
+            var nameSplit = figureOutNames(fullName);
+
+            var firstName = nameSplit[0];
+            var lastName = nameSplit[1];
+
+            var eml = email(firstName, lastName);
+            var title = lines[i + 1].replace(/ at .+$/, "");
+            var location = "";
+
+           if (document.getElementById("nameColumn").selectedIndex == 0) {  // name goes in two columns
+                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            } else {
+                table = table + "<tr><td><b>" + fullName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            } 
+        }  else if (i>0 && isCrazyLI(lines[i-1], lines[i])){
+            numMatches++;
+
+            var fullName = lines[i].substring(0, crazyMatch(lines[i]));
+            var nameSplit = figureOutNames(fullName);
+
+
+            var firstName = nameSplit[0];
+            var lastName = nameSplit[1];
+
+            var eml = email(firstName, lastName);
+            var title = lines[i + 1].replace(/ at .+$/, "");
+            var location = "";
+
+           if (document.getElementById("nameColumn").selectedIndex == 0) {  // name goes in two columns
+                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            } else {
+                table = table + "<tr><td><b>" + fullName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            } 
         }
     }
     table = table + "</table>";
-    
+
     document.getElementById("table").innerHTML = "Parsed " + numMatches + " leads.<br><br>" + table;
     //document.getElementById("dst").value = output;
 }
 
-function getLocation (locString){
+function getSNLocation (locString){
     var string = locString.match(/Location(.*)Industry/);
     if (string[1]) return string[1];
     else return "";
 }
 
-function email(name) {
-    if (name == "") {
-        return;
-    }
+function email(firstName, lastName) {
 
     var pat = document.getElementById("pat").value;
     
@@ -60,10 +133,6 @@ function email(name) {
     for (var i = 0; i < tokens.length; i++)
         pat = pat.replace(tokens[i], "{" + tokens[i] + "}");
 
-    var nameSplit = name.split(" ");
-
-    var firstName = nameSplit[0];
-    var lastName = nameSplit[1];
     var firstInit = firstName.charAt(0);
     var lastInit = lastName.charAt(0);
 
@@ -115,7 +184,7 @@ font-weight: 400;
 
     <body>
         
-<div style="font-size:20px;margin-top:5px"><img src="http://www.cloudera.com/content/dam/cloudera/logos/Cloudera_logo_rgb.png" style="width: 168px;margin-bottom:15px;margin-right:25px" valign="left" align="middle">LinkedIn Lead Parser by <a href="mailto:droman@cloudera.com">Daniel Roman</a> | 2015-July-21 | <a href="https://www.linkedin.com/sales/?trk=nav_logo"><img src="https://static.licdn.com/scds/common/u/images/logos/linkedin/logo_in_nav_retina_88x72.png" width="22">Sales Navigator</a></div>
+<div style="font-size:20px;margin-top:5px"><img src="http://www.cloudera.com/content/dam/cloudera/logos/Cloudera_logo_rgb.png" style="width: 168px;margin-bottom:15px;margin-right:25px" valign="left" align="middle">LinkedIn Lead Parser by <a href="mailto:droman@cloudera.com">Daniel Roman</a> | 2015-Aug-03 | <a href="https://www.linkedin.com/sales/?trk=nav_logo"><img src="https://static.licdn.com/scds/common/u/images/logos/linkedin/logo_in_nav_retina_88x72.png" width="22">Sales Navigator</a></div>
 
         <form name="li">
             <input type="text" id="pat" value="FILN@company.com" size="40" onChange="parseIt();">

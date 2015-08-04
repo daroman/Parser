@@ -10,12 +10,12 @@ function isSalesNavigator(line, previousLine){
     if (previousLine == ""){
       return false;  
     } 
-    var retVal = line.search(/TeamLink$|Saved$|3rd$|2nd$|Open link$|1st$/);
+    var retVal = line.search(/TeamLink$|Saved$|3rd$|2nd$|Open link$|1st$|Datanyze/);
     return (retVal > 0);
 }
 
 function isRegularLI(line){
-    var retVal = line.search(/^  .*/);
+    var retVal = line.search(/^  \w+/);
     return (retVal == 0);
 }
 

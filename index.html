@@ -125,10 +125,14 @@ function parseIt() {
 
 function getSNLocation (locString){
     var string = locString.match(/Location(.*)Industry/);
-    if (string[1]) return string[1];
-    else return "";
+    if (string){
+        if (string[1]) return string[1];
+    } else {
+      string = locString.match(/Location(.*)/);
+      if (string && string[1]) return string[1];
+      else return "Unknown location";
+    }
 }
-
 function email(firstName, lastName) {
 
     var pat = document.getElementById("pat").value;

@@ -73,9 +73,9 @@ function parseIt() {
             var location = getSNLocation(lines[i+2]);
 
             if (document.getElementById("nameColumn").selectedIndex == 0) {  // name goes in two columns
-                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
             } else {
-            table = table + "<tr><td><b>" + fullName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            table = table + "<tr><td><b>" + fullName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
             } 
         } else if (isRegularLI(lines[i])) {
             numMatches++;
@@ -92,9 +92,9 @@ function parseIt() {
             var location = "";
 
            if (document.getElementById("nameColumn").selectedIndex == 0) {  // name goes in two columns
-                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
             } else {
-                table = table + "<tr><td><b>" + fullName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+                table = table + "<tr><td><b>" + fullName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
             } 
         }  else if (i>0 && isCrazyLI(lines[i-1], lines[i])){
             numMatches++;

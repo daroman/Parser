@@ -46,6 +46,13 @@ function figureOutNames(string){
     }
 }
 
+function getCompany (string){
+    var company = string.match(/ (at|@) (.+$)/);
+    if (company && company[2]) company = company[2];
+    else company = "";
+    return company;
+}
+
 function parseIt() {
     var numMatches = 0;
     
@@ -72,10 +79,12 @@ function parseIt() {
             var title = lines[i + 1].replace(/ at .+$/, "");
             var location = getSNLocation(lines[i+2]);
 
+            var company = getCompany(lines[i+1]);            
+
             if (document.getElementById("nameColumn").selectedIndex == 0) {  // name goes in two columns
-                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td><td>" + company + "</td></tr>";
             } else {
-            table = table + "<tr><td><b>" + fullName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+            table = table + "<tr><td><b>" + fullName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td><td>" + company + "</td></tr>";
             } 
         } else if (isRegularLI(lines[i])) {
             numMatches++;
@@ -89,12 +98,14 @@ function parseIt() {
 
             var eml = email(firstName, lastName);
             var title = lines[i + 1].replace(/ at .+$/, "");
+            var company = getCompany(lines[i+1]);
+
             var location = "";
 
            if (document.getElementById("nameColumn").selectedIndex == 0) {  // name goes in two columns
-                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td><td>" + company + "</td></tr>";
             } else {
-                table = table + "<tr><td><b>" + fullName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+                table = table + "<tr><td><b>" + fullName + "</b></td><td>" + title + "</td><td>" + location + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td><td>" + company + "</td></tr>";
             } 
         }  else if (i>0 && isCrazyLI(lines[i-1], lines[i])){
             numMatches++;
@@ -108,12 +119,14 @@ function parseIt() {
 
             var eml = email(firstName, lastName);
             var title = lines[i + 1].replace(/ at .+$/, "");
+            var company = getCompany(lines[i+1]);
+
             var location = "";
 
            if (document.getElementById("nameColumn").selectedIndex == 0) {  // name goes in two columns
-                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+                table = table + "<tr><td><b>" + firstName + "</b></td><td><b>" + lastName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td><td>" + company + "</td></tr>";
             } else {
-                table = table + "<tr><td><b>" + fullName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td></tr>";
+                table = table + "<tr><td><b>" + fullName + "</b></td><td>" + location + "</td><td>" + title + "</td><td><a href='mailto:" + eml + "'>" + eml + "</a></td><td>" + company + "</td></tr>";
             } 
         }
     }
